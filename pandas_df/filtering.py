@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, List
 import sys
 import os
 
@@ -14,8 +14,15 @@ def simple_filter():
   def filter_by_cpc(threshold: int):
     return df[df.cars_per_cap > threshold]
 
+  def filter_by_country(countries: List[str]):
+    """
+    Use .isin() to filter the value belongs to a list
+    """
+    return df[df.country.isin(countries)]
+
   return {
-    "filter_by_cpc": filter_by_cpc
+    "filter_by_cpc": filter_by_cpc,
+    "filter_by_country": filter_by_country
   }
 
 def get_filter(name: str) -> Callable:
@@ -27,3 +34,6 @@ def get_filter(name: str) -> Callable:
 
 # Filter all countries having cpc > 300
 print('Cars per cap > 300:\n', get_filter('filter_by_cpc')(300))
+
+# Filter by country
+print('Only US and JP: \n', get_filter('filter_by_country')(['United States', 'Japan']))
