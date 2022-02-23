@@ -25,3 +25,13 @@ print(df.sort_values('cars_per_cap').head(n=3))
 
 # Sort by country, ascending and then cars_per_cap, descending
 print(df.sort_values(['country', 'cars_per_cap'], ascending=[True, False]))
+
+
+"""
+TRANSFORMING DATASET
+"""
+
+# Add new column
+cars_per_cap_list = df.loc[:, 'cars_per_cap'].values.flatten().tolist()
+df['is_high_car_per_cap'] = ['high' if i > 500 else 'low' for i in cars_per_cap_list]
+print(df)
