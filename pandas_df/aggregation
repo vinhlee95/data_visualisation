@@ -1,0 +1,60 @@
+import sys
+import os
+import numpy as np
+import pandas as pd
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+from pandas_df.datasource import df
+
+"""
+The .agg() method makes it easy to compute 
+multiple statistics on multiple columns, all in just one line of code.
+"""
+
+# A custom IQR function
+def iqr(column):
+  """
+  "IQR" is short for inter-quartile range, which is the 75th percentile minus the 25th percentile. 
+  It's an alternative to standard deviation that is helpful if your data contains outliers.
+  """
+  return column.quantile(0.75) - column.quantile(0.25)
+
+  
+# Calculate IQR of cars_per_cap
+print(df['cars_per_cap'].agg(iqr))
+
+# Calculate IQR AND median at the same time
+print(df['cars_per_cap'].agg([iqr, np.median]))
+
+"""
+CUMULATIVE STATISTICS
+Cumulative statistics can also be helpful in tracking summary statistics over time. 
+"""
+
+"""
+DROPPING DUPLICATES
+"""
+df = pd.DataFrame({
+  'brand': ['Yum Yum', 'Yum Yum', 'Indomie', 'Indomie', 'Indomie'],
+  'style': ['cup', 'cup', 'cup', 'pack', 'pack'],
+  'rating': [4, 4, 3.5, 15, 5]
+})
+
+"""
+     brand style  rating
+0  Yum Yum   cup     4.0
+2  Indomie   cup     3.5
+"""
+print(df.drop_duplicates(['brand']))
+
+
+"""
+     brand style  rating
+0  Yum Yum   cup     4.0
+2  Indomie   cup     3.5
+3  Indomie  pack    15.0
+"""
+print(df.drop_duplicates(['brand', 'style']))
+
